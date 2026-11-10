@@ -25,7 +25,7 @@
   --accent:#f2864c; --accent-soft:#3a2418; --ink:#9db4ff; color-scheme:dark}
 
 *{box-sizing:border-box}
-body{background:var(--bg);color:var(--fg);font-family:var(--f-body);font-size:16.5px;line-height:1.6;
+body{overflow-x:clip;background:var(--bg);color:var(--fg);font-family:var(--f-body);font-size:16.5px;line-height:1.6;
   padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
 .wrap{max-width:860px;margin:0 auto;padding-block:56px 72px;display:flex;flex-direction:column;gap:72px}
 a{color:var(--ink);text-underline-offset:3px}
@@ -100,35 +100,116 @@ section{display:flex;flex-direction:column;gap:24px}
 .contact .btn{background:transparent;color:var(--bg);border-color:rgba(127,127,127,.5)}
 .contact .btn:hover{border-color:var(--accent)}
 footer{font-family:var(--f-mono);font-size:.76rem;color:var(--muted);text-align:center}
+
+/* ---------- Navigation ---------- */
+html{scroll-behavior:smooth}
+section,header{scroll-margin-top:80px}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:30;background:var(--bg)}
+.topnav{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;margin-inline:calc(-1*max(16px,env(safe-area-inset-left,0px)));
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));
+  background:color-mix(in srgb,var(--bg) 82%,transparent);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  border-bottom:1px solid transparent;transition:border-color .3s}
+.topnav.scrolled{border-bottom-color:var(--line)}
+.topnav .in{max-width:860px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:16px;padding-block:12px}
+.topnav .logo{font-family:var(--f-mono);font-size:.85rem;font-weight:500;color:var(--fg);text-decoration:none;white-space:nowrap}
+.topnav .logo b{color:var(--accent)}
+.topnav ul{list-style:none;margin:0;padding:0;display:flex;gap:4px;overflow-x:auto;scrollbar-width:none}
+.topnav ul::-webkit-scrollbar{display:none}
+.topnav a.nl{font-family:var(--f-mono);font-size:.78rem;color:var(--muted);text-decoration:none;padding:6px 10px;border-radius:6px;white-space:nowrap;transition:color .2s,background .2s}
+.topnav a.nl:hover{color:var(--fg)}
+.topnav a.nl.active{color:var(--fg);background:var(--surface);box-shadow:inset 0 0 0 1px var(--line)}
+.progress{position:absolute;left:0;bottom:-1px;height:2px;width:100%;background:var(--accent);transform-origin:left;transform:scaleX(0)}
+@media (max-width:620px){.topnav .logo{display:none}.topnav .in{justify-content:flex-start}}
+
+/* ---------- Hero backdrop ---------- */
+.hero{position:relative;isolation:isolate}
+.hero canvas{position:absolute;inset:-40px -16px -20px;width:calc(100% + 32px);height:calc(100% + 60px);z-index:-1;pointer-events:none;
+  -webkit-mask-image:radial-gradient(ellipse at 70% 40%,#000 0%,transparent 70%);mask-image:radial-gradient(ellipse at 70% 40%,#000 0%,transparent 70%)}
+.prompt .typed{color:var(--fg)}
+.prompt .caret{display:inline-block;width:.55em;height:1em;background:var(--muted);vertical-align:-.15em;margin-left:2px;animation:blink 1s steps(1) infinite}
+
+/* ---------- Load + scroll motion (content stays visible without JS) ---------- */
+@keyframes rise{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+@keyframes letter{from{opacity:0;transform:translateY(.4em) rotate(4deg)}to{opacity:1;transform:none}}
+.anim .hero .stage{animation:rise .7s cubic-bezier(.2,.7,.2,1) both;animation-delay:calc(var(--d,0) * 1ms)}
+.anim .hero h1 .ch{display:inline-block;animation:letter .6s cubic-bezier(.2,.7,.2,1) both;animation-delay:calc(450ms + var(--i) * 45ms)}
+.anim .reveal{opacity:0;transform:translateY(24px);transition:opacity .7s cubic-bezier(.2,.7,.2,1),transform .7s cubic-bezier(.2,.7,.2,1);transition-delay:calc(var(--i,0) * 70ms)}
+.anim .reveal.shown{opacity:1;transform:none}
+
+/* hover polish */
+.btn{transition:transform .2s,border-color .2s,background .2s}
+.btn:hover{transform:translateY(-2px)}
+.btn .arr{display:inline-block;transition:transform .2s}
+.btn:hover .arr{transform:translate(2px,-2px)}
+.chip{transition:border-color .2s,color .2s,transform .2s}
+.chip:hover{border-color:var(--accent);color:var(--accent);transform:translateY(-1px)}
+.proj{transition:transform .3s cubic-bezier(.2,.7,.2,1),border-color .3s,box-shadow .3s;position:relative;overflow:hidden}
+.proj:hover{transform:translateY(-4px);border-color:var(--accent);box-shadow:0 14px 30px -18px color-mix(in srgb,var(--accent) 60%,transparent)}
+.proj::after{content:"";position:absolute;inset:0;background:radial-gradient(260px circle at var(--mx,50%) var(--my,50%),color-mix(in srgb,var(--accent) 10%,transparent),transparent 70%);opacity:0;transition:opacity .3s;pointer-events:none}
+.proj:hover::after{opacity:1}
+.flag{transition:background .25s}
+.flag:hover{background:color-mix(in srgb,var(--accent-soft) 45%,transparent)}
+.flag .what code{display:inline-block;clip-path:inset(0 100% 0 0);transition:clip-path .9s steps(28)}
+.flag.shown .what code,html:not(.anim) .flag .what code{clip-path:inset(0 0 0 0)}
+.timeline{position:relative;border-left:none}
+.timeline::before{content:"";position:absolute;left:0;top:0;bottom:0;width:2px;background:var(--line)}
+.timeline::after{content:"";position:absolute;left:0;top:0;width:2px;height:var(--fill,100%);background:var(--accent);transition:height .2s linear}
+.tl::before{left:-27px;z-index:1;transition:background .3s,transform .3s}
+.tl.shown::before{background:var(--accent);transform:scale(1.1)}
+
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  .anim .hero .stage,.anim .hero h1 .ch{animation:none}
+  .anim .reveal{opacity:1;transform:none;transition:none}
+  .flag .what code{clip-path:none;transition:none}
+  .proj,.btn,.chip{transition:none}
+  .prompt .caret{animation:none}
+}
 </style>
 </head>
 <body>
 
+<nav class="topnav" id="topnav" aria-label="Sections">
+  <div class="in">
+    <a class="logo" href="#top"><b>~/</b>sakthi</a>
+    <ul>
+      <li><a class="nl" href="#about">about</a></li>
+      <li><a class="nl" href="#skills">skills</a></li>
+      <li><a class="nl" href="#projects">projects</a></li>
+      <li><a class="nl" href="#wins">wins</a></li>
+      <li><a class="nl" href="#experience">experience</a></li>
+      <li><a class="nl" href="#contact">contact</a></li>
+    </ul>
+  </div>
+  <div class="progress" id="progress"></div>
+</nav>
+
 <div class="wrap">
 
-  <header class="hero">
-    <div class="prompt"><b>sakthi@tamilnadu</b>:~$ whoami</div>
-    <h1>Sakthi S M<span class="cursor" aria-hidden="true"></span></h1>
-    <p class="role">Software engineer who builds <em>front-end products in React &amp; Next.js</em> and breaks things for fun in <em>CTF security challenges</em>.</p>
-    <div class="facts">
-      <span><b>5×</b> hackathon &amp; CTF wins</span>
-      <span><b>75+</b> students mentored</span>
-      <span><b>9.51</b> CGPA, B.Tech IT</span>
+  <header class="hero" id="top">
+    <canvas id="net" aria-hidden="true"></canvas>
+    <div class="prompt stage" style="--d:0"><b>sakthi@tamilnadu</b>:~$ <span class="typed" id="typed">whoami</span><span class="caret" aria-hidden="true"></span></div>
+    <h1 id="name" aria-label="Sakthi S M">Sakthi S M<span class="cursor" aria-hidden="true"></span></h1>
+    <p class="role stage" style="--d:900">Software engineer who builds <em>front-end products in React &amp; Next.js</em> and breaks things for fun in <em>CTF security challenges</em>.</p>
+    <div class="facts stage" style="--d:1050">
+      <span><b data-count="5" data-suffix="×">5×</b> hackathon &amp; CTF wins</span>
+      <span><b data-count="75" data-suffix="+">75+</b> students mentored</span>
+      <span><b data-count="9.51" data-dec="2">9.51</b> CGPA, B.Tech IT</span>
     </div>
-    <div class="links">
+    <div class="links stage" style="--d:1200">
       <a class="btn primary" href="#contact">Get in touch</a>
-      <a class="btn" href="https://github.com/Sakthi-S-M" target="_blank" rel="noopener">GitHub ↗</a>
-      <a class="btn" href="https://www.linkedin.com/in/sakthi-s-m-270b60200/" target="_blank" rel="noopener">LinkedIn ↗</a>
-      <a class="btn" href="https://medium.com/@SAKTHISM" target="_blank" rel="noopener">Medium ↗</a>
+      <a class="btn" href="https://github.com/Sakthi-S-M" target="_blank" rel="noopener">GitHub <span class="arr">↗</span></a>
+      <a class="btn" href="https://www.linkedin.com/in/sakthi-s-m-270b60200/" target="_blank" rel="noopener">LinkedIn <span class="arr">↗</span></a>
+      <a class="btn" href="https://medium.com/@SAKTHISM" target="_blank" rel="noopener">Medium <span class="arr">↗</span></a>
     </div>
   </header>
 
-  <section class="about" aria-labelledby="about-h">
+  <section class="about" id="about" aria-labelledby="about-h">
     <h2 id="about-h">About <span class="cmd">cat about.md</span></h2>
     <p>I'm an analytical, curious engineer from Tamil Nadu. I started out in cybersecurity, competing in capture-the-flag events and teaching ethical hacking, and moved into building web products. Today I work mostly in TypeScript, React and Next.js, and I bring a security mindset to every interface I ship. I also enjoy teaching, writing about tech, and cycling.</p>
   </section>
 
-  <section aria-labelledby="skills-h">
+  <section id="skills" aria-labelledby="skills-h">
     <h2 id="skills-h">Skills <span class="cmd">ls ~/stack</span></h2>
     <div class="skills">
       <div class="skillgroup"><h3>Front-end</h3><div class="chips">
@@ -140,39 +221,39 @@ footer{font-family:var(--f-mono);font-size:.76rem;color:var(--muted);text-align:
     </div>
   </section>
 
-  <section aria-labelledby="proj-h">
+  <section id="projects" aria-labelledby="proj-h">
     <h2 id="proj-h">Projects <span class="cmd">git log --projects</span></h2>
     <div class="projects">
       <article class="proj feature">
         <span class="tag">Built with Tamil Nadu Police, Coimbatore</span>
         <h3>Deft Patrol</h3>
         <p>A mobile app that gives police a hassle-free patrolling experience and helps keep homes secure while their owners are away. I was the Android developer on a team of four, building it over three months as a project and internship with Coimbatore City Police.</p>
-        <div class="meta"><span>Java · Android · Firebase</span><a href="https://github.com/Sakthi-S-M/Deft_Patrol" target="_blank" rel="noopener">View code ↗</a></div>
+        <div class="meta"><span>Java · Android · Firebase</span><a href="https://github.com/Sakthi-S-M/Deft_Patrol" target="_blank" rel="noopener">View code <span class="arr">↗</span></a></div>
       </article>
       <article class="proj">
         <h3>Dark Web Crawler</h3>
         <p>A crawler for the Tor network that finds, analyses and indexes darknet market sites selling illegal drugs, to support investigators.</p>
-        <div class="meta"><span>Python · Tor</span><a href="https://github.com/Sakthi-S-M/Crawler_Darkweb" target="_blank" rel="noopener">View code ↗</a></div>
+        <div class="meta"><span>Python · Tor</span><a href="https://github.com/Sakthi-S-M/Crawler_Darkweb" target="_blank" rel="noopener">View code <span class="arr">↗</span></a></div>
       </article>
       <article class="proj">
         <h3>Fake Website Detector</h3>
         <p>Machine learning models trained on public datasets of benign and malicious URLs to flag fake websites.</p>
-        <div class="meta"><span>Python · Jupyter</span><a href="https://github.com/Sakthi-S-M/Machine_Learning" target="_blank" rel="noopener">View code ↗</a></div>
+        <div class="meta"><span>Python · Jupyter</span><a href="https://github.com/Sakthi-S-M/Machine_Learning" target="_blank" rel="noopener">View code <span class="arr">↗</span></a></div>
       </article>
       <article class="proj">
         <h3>Password Generator</h3>
         <p>A full-stack app that creates strong, customisable passwords, built on the MERN stack.</p>
-        <div class="meta"><span>MongoDB · Express · React · Node</span><a href="https://github.com/Sakthi-S-M/passwordgenerator" target="_blank" rel="noopener">View code ↗</a></div>
+        <div class="meta"><span>MongoDB · Express · React · Node</span><a href="https://github.com/Sakthi-S-M/passwordgenerator" target="_blank" rel="noopener">View code <span class="arr">↗</span></a></div>
       </article>
       <article class="proj">
         <h3>Next.js &amp; TypeScript Lab</h3>
         <p>Ongoing hands-on builds with Next.js, Tailwind and TypeScript, alongside a Swiggy-style food delivery UI and an installable PWA.</p>
-        <div class="meta"><span>Next.js · TypeScript · Tailwind</span><a href="https://github.com/Sakthi-S-M/nextjslearn" target="_blank" rel="noopener">View code ↗</a></div>
+        <div class="meta"><span>Next.js · TypeScript · Tailwind</span><a href="https://github.com/Sakthi-S-M/nextjslearn" target="_blank" rel="noopener">View code <span class="arr">↗</span></a></div>
       </article>
     </div>
   </section>
 
-  <section aria-labelledby="flags-h">
+  <section id="wins" aria-labelledby="flags-h">
     <h2 id="flags-h">Flags captured <span class="cmd">cat wins.txt</span></h2>
     <div class="flags">
       <div class="flag"><time>Feb 2023</time><div class="what"><strong>BIT's Hack, Bannari Amman Institute</strong><code>flag{hackathon_winner}</code></div><span class="prize">₹10,000</span></div>
@@ -183,7 +264,7 @@ footer{font-family:var(--f-mono);font-size:.76rem;color:var(--muted);text-align:
     </div>
   </section>
 
-  <section aria-labelledby="exp-h">
+  <section id="experience" aria-labelledby="exp-h">
     <h2 id="exp-h">Experience &amp; teaching <span class="cmd">history</span></h2>
     <div class="timeline">
       <div class="tl"><span class="when">Oct – Nov 2022</span><h3>Android Developer Intern · Tamil Nadu Police, Coimbatore City</h3><p>Built the Deft Patrol app with Android Studio and Firebase for officers in Singanallur.</p></div>
@@ -208,11 +289,87 @@ footer{font-family:var(--f-mono);font-size:.76rem;color:var(--muted);text-align:
 </div>
 
 <script>
-document.getElementById('copy').addEventListener('click', function(){
-  var b=this, t=document.getElementById('email').textContent;
-  function sel(){var r=document.createRange();r.selectNodeContents(document.getElementById('email'));var s=getSelection();s.removeAllRanges();s.addRange(r);b.textContent='Selected, press Ctrl+C';}
-  try{navigator.clipboard.writeText(t).then(function(){b.textContent='Copied';setTimeout(function(){b.textContent='Copy email'},1800)},sel)}catch(e){sel()}
-});
+(function(){
+  var root=document.documentElement;
+  var reduce=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(!reduce&&'IntersectionObserver' in window) root.classList.add('anim');
+
+  /* Copy email */
+  document.getElementById('copy').addEventListener('click',function(){
+    var b=this,t=document.getElementById('email').textContent;
+    function sel(){var r=document.createRange();r.selectNodeContents(document.getElementById('email'));var s=getSelection();s.removeAllRanges();s.addRange(r);b.textContent='Selected, press Ctrl+C';}
+    try{navigator.clipboard.writeText(t).then(function(){b.textContent='Copied ✓';setTimeout(function(){b.textContent='Copy email'},1800)},sel)}catch(e){sel()}
+  });
+
+  /* Hero: split name into letters */
+  var h1=document.getElementById('name');
+  if(root.classList.contains('anim')){
+    var txt='Sakthi S M',cur=h1.querySelector('.cursor');h1.textContent='';
+    txt.split('').forEach(function(c,i){var s=document.createElement('span');s.className='ch';s.setAttribute('aria-hidden','true');s.style.setProperty('--i',i);s.textContent=c===' '?' ':c;h1.appendChild(s)});
+    h1.appendChild(cur);
+    /* type the prompt command */
+    var typed=document.getElementById('typed'),cmd='whoami';typed.textContent='';
+    cmd.split('').forEach(function(c,i){setTimeout(function(){typed.textContent+=c},120+i*55)});
+  }
+
+  /* Count up stats */
+  function countUp(el){
+    var end=parseFloat(el.dataset.count),dec=+(el.dataset.dec||0),suf=el.dataset.suffix||'',t0=null,dur=1100;
+    function step(t){if(!t0)t0=t;var p=Math.min((t-t0)/dur,1),e=1-Math.pow(1-p,3);el.textContent=(end*e).toFixed(dec)+suf;if(p<1)requestAnimationFrame(step)}
+    requestAnimationFrame(step);
+  }
+  if(root.classList.contains('anim')) setTimeout(function(){document.querySelectorAll('[data-count]').forEach(countUp)},1100);
+
+  /* Scroll reveals */
+  var groups=[['section h2'],['.about p'],['.skillgroup'],['.proj'],['.flag'],['.tl'],['.contact']];
+  if(root.classList.contains('anim')){
+    groups.forEach(function(g){document.querySelectorAll(g[0]).forEach(function(el,i){el.classList.add('reveal');el.style.setProperty('--i',i%6)})});
+    var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('shown');io.unobserve(e.target)}})},{rootMargin:'0px 0px -8% 0px',threshold:.08});
+    document.querySelectorAll('.reveal').forEach(function(el){io.observe(el)});
+    /* safety: never leave content hidden */
+    setTimeout(function(){document.querySelectorAll('.reveal:not(.shown)').forEach(function(el){var r=el.getBoundingClientRect();if(r.top<innerHeight)el.classList.add('shown')})},2500);
+  }
+
+  /* Project card spotlight follows cursor */
+  document.querySelectorAll('.proj').forEach(function(c){c.addEventListener('pointermove',function(e){var r=c.getBoundingClientRect();c.style.setProperty('--mx',(e.clientX-r.left)+'px');c.style.setProperty('--my',(e.clientY-r.top)+'px')})});
+
+  /* Nav: active section, scroll progress, timeline fill */
+  var nav=document.getElementById('topnav'),bar=document.getElementById('progress'),links=[].slice.call(document.querySelectorAll('.topnav a.nl'));
+  var secs=links.map(function(a){return document.querySelector(a.getAttribute('href'))});
+  var tline=document.querySelector('.timeline');
+  function onScroll(){
+    var y=scrollY,h=document.documentElement.scrollHeight-innerHeight;
+    nav.classList.toggle('scrolled',y>8);
+    bar.style.transform='scaleX('+(h>0?Math.min(y/h,1):0)+')';
+    var act=-1;secs.forEach(function(s,i){if(s&&s.getBoundingClientRect().top<innerHeight*.35)act=i});
+    if(innerHeight+y>=document.documentElement.scrollHeight-4)act=secs.length-1;
+    links.forEach(function(a,i){a.classList.toggle('active',i===act)});
+    if(tline&&root.classList.contains('anim')){var r=tline.getBoundingClientRect(),f=(innerHeight*.6-r.top)/r.height;tline.style.setProperty('--fill',Math.max(0,Math.min(f,1))*100+'%')}
+  }
+  addEventListener('scroll',onScroll,{passive:true});addEventListener('resize',onScroll);onScroll();
+
+  /* Hero network backdrop */
+  var cv=document.getElementById('net'),ctx=cv.getContext&&cv.getContext('2d');
+  if(ctx){
+    var pts=[],W,H,dpr=Math.min(devicePixelRatio||1,2),running=true;
+    function col(n){return getComputedStyle(root).getPropertyValue(n).trim()||'#888'}
+    function size(){var r=cv.getBoundingClientRect();W=r.width;H=r.height;cv.width=W*dpr;cv.height=H*dpr;ctx.setTransform(dpr,0,0,dpr,0,0);
+      var n=Math.round(Math.min(46,W*H/9000));pts=[];for(var i=0;i<n;i++)pts.push({x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-.5)*.25,vy:(Math.random()-.5)*.25})}
+    function draw(){
+      ctx.clearRect(0,0,W,H);var ac=col('--accent'),mu=col('--muted');
+      for(var i=0;i<pts.length;i++){var p=pts[i];
+        if(!reduce){p.x+=p.vx;p.y+=p.vy;if(p.x<0||p.x>W)p.vx*=-1;if(p.y<0||p.y>H)p.vy*=-1}
+        for(var j=i+1;j<pts.length;j++){var q=pts[j],dx=p.x-q.x,dy=p.y-q.y,d=dx*dx+dy*dy;
+          if(d<11000){ctx.globalAlpha=(1-d/11000)*.35;ctx.strokeStyle=mu;ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(p.x,p.y);ctx.lineTo(q.x,q.y);ctx.stroke()}}
+      }
+      for(var k=0;k<pts.length;k++){ctx.globalAlpha=k%7===0?.9:.45;ctx.fillStyle=k%7===0?ac:mu;ctx.beginPath();ctx.arc(pts[k].x,pts[k].y,k%7===0?2.4:1.6,0,7);ctx.fill()}
+      ctx.globalAlpha=1;
+      if(!reduce&&running)requestAnimationFrame(draw);
+    }
+    size();draw();addEventListener('resize',function(){size();if(reduce)draw()});
+    if('IntersectionObserver' in window&&!reduce){new IntersectionObserver(function(es){var v=es[0].isIntersecting;if(v&&!running){running=true;requestAnimationFrame(draw)}running=v}).observe(cv)}
+  }
+})();
 </script>
 </body>
 </html>
