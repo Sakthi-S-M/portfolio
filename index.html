@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Portfolio of Sakthi S M, software engineer working in React, Next.js and cybersecurity.">
+<title>Sakthi S M</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: single reading column, a "terminal prompt" hero, then sections; CTF wins shown as captured flags */
+:root{
+  --bg:#eef1f5; --surface:#ffffff; --fg:#141a26; --muted:#5a6475; --line:#d6dce6;
+  --accent:#d1561b; --accent-soft:#fbe6da; --ink:#1f3a8a;
+  --f-display:"Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --f-body:"Instrument Sans", "Segoe UI", system-ui, sans-serif;
+  --f-mono:"JetBrains Mono", ui-monospace, Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0f131b; --surface:#171d28; --fg:#e6eaf2; --muted:#98a2b5; --line:#283141;
+  --accent:#f2864c; --accent-soft:#3a2418; --ink:#9db4ff; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0f131b; --surface:#171d28; --fg:#e6eaf2; --muted:#98a2b5; --line:#283141;
+  --accent:#f2864c; --accent-soft:#3a2418; --ink:#9db4ff; color-scheme:dark}
+
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font-family:var(--f-body);font-size:16.5px;line-height:1.6;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.wrap{max-width:860px;margin:0 auto;padding-block:56px 72px;display:flex;flex-direction:column;gap:72px}
+a{color:var(--ink);text-underline-offset:3px}
+a:focus-visible,button:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:4px}
+h1,h2,h3{font-family:var(--f-display);text-wrap:balance;margin:0;line-height:1.1}
+h2{font-size:1.65rem;font-weight:700;display:flex;align-items:baseline;gap:12px}
+h2 .cmd{font-family:var(--f-mono);font-size:.8rem;font-weight:400;color:var(--muted)}
+p{margin:0}
+.mono{font-family:var(--f-mono)}
+section{display:flex;flex-direction:column;gap:24px}
+
+/* Hero */
+.prompt{font-family:var(--f-mono);font-size:.85rem;color:var(--muted)}
+.prompt b{color:var(--accent);font-weight:500}
+.hero{display:flex;flex-direction:column;gap:20px}
+.hero h1{font-size:clamp(2.8rem,9vw,5.2rem);font-weight:800;letter-spacing:-.02em}
+.hero h1 .cursor{display:inline-block;width:.45em;height:.8em;background:var(--accent);margin-left:.08em;vertical-align:-.02em;animation:blink 1.1s steps(1) infinite}
+@keyframes blink{50%{opacity:0}}
+@media (prefers-reduced-motion:reduce){.hero h1 .cursor{animation:none}}
+.role{font-family:var(--f-display);font-size:clamp(1.2rem,3vw,1.5rem);font-weight:500;color:var(--muted);max-width:34ch}
+.role em{font-style:normal;color:var(--fg)}
+.links{display:flex;flex-wrap:wrap;gap:10px;margin-top:4px}
+.btn{font-family:var(--f-mono);font-size:.85rem;padding:9px 14px;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--fg);text-decoration:none;cursor:pointer;display:inline-flex;align-items:center;gap:8px}
+.btn:hover{border-color:var(--accent)}
+.btn.primary{background:var(--fg);color:var(--bg);border-color:var(--fg)}
+.facts{display:flex;flex-wrap:wrap;gap:8px 24px;font-family:var(--f-mono);font-size:.82rem;color:var(--muted)}
+.facts span b{color:var(--fg);font-weight:500}
+
+/* About */
+.about p{max-width:65ch;font-size:1.05rem}
+
+/* Skills */
+.skills{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:20px}
+.skillgroup h3{font-family:var(--f-mono);font-size:.75rem;font-weight:500;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:10px}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{font-size:.88rem;padding:4px 10px;border-radius:999px;background:var(--surface);border:1px solid var(--line)}
+
+/* Projects */
+.projects{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,370px),1fr));gap:16px}
+.proj{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:20px;display:flex;flex-direction:column;gap:10px;min-width:0}
+.proj h3{font-size:1.2rem;font-weight:700}
+.proj p{color:var(--muted);font-size:.95rem}
+.proj .meta{display:flex;flex-wrap:wrap;gap:6px 14px;font-family:var(--f-mono);font-size:.76rem;color:var(--muted);margin-top:auto;padding-top:6px}
+.proj .meta a{color:var(--ink)}
+.proj.feature{grid-column:1/-1;border-color:var(--accent)}
+.tag{font-family:var(--f-mono);font-size:.7rem;text-transform:uppercase;letter-spacing:.08em;color:var(--accent)}
+
+/* Flags (achievements) */
+.flags{display:flex;flex-direction:column;border-top:1px solid var(--line)}
+.flag{display:grid;grid-template-columns:96px 1fr auto;gap:6px 18px;padding:16px 0;border-bottom:1px solid var(--line);align-items:baseline}
+.flag time{font-family:var(--f-mono);font-size:.8rem;color:var(--muted);font-variant-numeric:tabular-nums}
+.flag .what{min-width:0}
+.flag .what strong{font-family:var(--f-display);font-weight:700;font-size:1.08rem;display:block}
+.flag .what code{font-family:var(--f-mono);font-size:.8rem;color:var(--accent);word-break:break-all}
+.flag .prize{font-family:var(--f-mono);font-size:.82rem;background:var(--accent-soft);color:var(--fg);padding:3px 8px;border-radius:6px;white-space:nowrap;font-variant-numeric:tabular-nums}
+@media (max-width:560px){.flag{grid-template-columns:1fr auto}.flag time{grid-column:1/-1}}
+
+/* Timeline */
+.timeline{display:flex;flex-direction:column;gap:22px;border-left:2px solid var(--line);padding-left:22px}
+.tl{position:relative;display:flex;flex-direction:column;gap:4px}
+.tl::before{content:"";position:absolute;left:-29px;top:.45em;width:12px;height:12px;border-radius:50%;background:var(--bg);border:2px solid var(--accent)}
+.tl .when{font-family:var(--f-mono);font-size:.8rem;color:var(--muted)}
+.tl h3{font-size:1.1rem;font-weight:700}
+.tl p{color:var(--muted);font-size:.95rem;max-width:65ch}
+
+/* Contact */
+.contact{background:var(--fg);color:var(--bg);border-radius:16px;padding:32px 28px;display:flex;flex-direction:column;gap:16px}
+.contact h2{color:var(--bg)}
+.contact p{opacity:.8;max-width:55ch}
+.contact .row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.email{font-family:var(--f-mono);font-size:1rem;user-select:all;background:rgba(127,127,127,.18);padding:8px 12px;border-radius:8px}
+.contact .btn{background:transparent;color:var(--bg);border-color:rgba(127,127,127,.5)}
+.contact .btn:hover{border-color:var(--accent)}
+footer{font-family:var(--f-mono);font-size:.76rem;color:var(--muted);text-align:center}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <header class="hero">
+    <div class="prompt"><b>sakthi@tamilnadu</b>:~$ whoami</div>
+    <h1>Sakthi S M<span class="cursor" aria-hidden="true"></span></h1>
+    <p class="role">Software engineer who builds <em>front-end products in React &amp; Next.js</em> and breaks things for fun in <em>CTF security challenges</em>.</p>
+    <div class="facts">
+      <span><b>5×</b> hackathon &amp; CTF wins</span>
+      <span><b>75+</b> students mentored</span>
+      <span><b>9.51</b> CGPA, B.Tech IT</span>
+    </div>
+    <div class="links">
+      <a class="btn primary" href="#contact">Get in touch</a>
+      <a class="btn" href="https://github.com/Sakthi-S-M" target="_blank" rel="noopener">GitHub ↗</a>
+      <a class="btn" href="https://www.linkedin.com/in/sakthi-s-m-270b60200/" target="_blank" rel="noopener">LinkedIn ↗</a>
+      <a class="btn" href="https://medium.com/@SAKTHISM" target="_blank" rel="noopener">Medium ↗</a>
+    </div>
+  </header>
+
+  <section class="about" aria-labelledby="about-h">
+    <h2 id="about-h">About <span class="cmd">cat about.md</span></h2>
+    <p>I'm an analytical, curious engineer from Tamil Nadu. I started out in cybersecurity, competing in capture-the-flag events and teaching ethical hacking, and moved into building web products. Today I work mostly in TypeScript, React and Next.js, and I bring a security mindset to every interface I ship. I also enjoy teaching, writing about tech, and cycling.</p>
+  </section>
+
+  <section aria-labelledby="skills-h">
+    <h2 id="skills-h">Skills <span class="cmd">ls ~/stack</span></h2>
+    <div class="skills">
+      <div class="skillgroup"><h3>Front-end</h3><div class="chips">
+        <span class="chip">React</span><span class="chip">Next.js</span><span class="chip">TypeScript</span><span class="chip">JavaScript</span><span class="chip">Tailwind CSS</span><span class="chip">HTML/CSS/SCSS</span><span class="chip">Ant Design</span><span class="chip">PWA</span></div></div>
+      <div class="skillgroup"><h3>Back-end &amp; data</h3><div class="chips">
+        <span class="chip">Node.js</span><span class="chip">MongoDB</span><span class="chip">SQL</span><span class="chip">Firebase</span><span class="chip">Python</span><span class="chip">Java</span><span class="chip">C / C++</span></div></div>
+      <div class="skillgroup"><h3>Security &amp; tools</h3><div class="chips">
+        <span class="chip">Ethical hacking</span><span class="chip">CTF</span><span class="chip">Kali Linux</span><span class="chip">Tor</span><span class="chip">Machine learning</span><span class="chip">Figma</span><span class="chip">Android Studio</span></div></div>
+    </div>
+  </section>
+
+  <section aria-labelledby="proj-h">
+    <h2 id="proj-h">Projects <span class="cmd">git log --projects</span></h2>
+    <div class="projects">
+      <article class="proj feature">
+        <span class="tag">Built with Tamil Nadu Police, Coimbatore</span>
+        <h3>Deft Patrol</h3>
+        <p>A mobile app that gives police a hassle-free patrolling experience and helps keep homes secure while their owners are away. I was the Android developer on a team of four, building it over three months as a project and internship with Coimbatore City Police.</p>
+        <div class="meta"><span>Java · Android · Firebase</span><a href="https://github.com/Sakthi-S-M/Deft_Patrol" target="_blank" rel="noopener">View code ↗</a></div>
+      </article>
+      <article class="proj">
+        <h3>Dark Web Crawler</h3>
+        <p>A crawler for the Tor network that finds, analyses and indexes darknet market sites selling illegal drugs, to support investigators.</p>
+        <div class="meta"><span>Python · Tor</span><a href="https://github.com/Sakthi-S-M/Crawler_Darkweb" target="_blank" rel="noopener">View code ↗</a></div>
+      </article>
+      <article class="proj">
+        <h3>Fake Website Detector</h3>
+        <p>Machine learning models trained on public datasets of benign and malicious URLs to flag fake websites.</p>
+        <div class="meta"><span>Python · Jupyter</span><a href="https://github.com/Sakthi-S-M/Machine_Learning" target="_blank" rel="noopener">View code ↗</a></div>
+      </article>
+      <article class="proj">
+        <h3>Password Generator</h3>
+        <p>A full-stack app that creates strong, customisable passwords, built on the MERN stack.</p>
+        <div class="meta"><span>MongoDB · Express · React · Node</span><a href="https://github.com/Sakthi-S-M/passwordgenerator" target="_blank" rel="noopener">View code ↗</a></div>
+      </article>
+      <article class="proj">
+        <h3>Next.js &amp; TypeScript Lab</h3>
+        <p>Ongoing hands-on builds with Next.js, Tailwind and TypeScript, alongside a Swiggy-style food delivery UI and an installable PWA.</p>
+        <div class="meta"><span>Next.js · TypeScript · Tailwind</span><a href="https://github.com/Sakthi-S-M/nextjslearn" target="_blank" rel="noopener">View code ↗</a></div>
+      </article>
+    </div>
+  </section>
+
+  <section aria-labelledby="flags-h">
+    <h2 id="flags-h">Flags captured <span class="cmd">cat wins.txt</span></h2>
+    <div class="flags">
+      <div class="flag"><time>Feb 2023</time><div class="what"><strong>BIT's Hack, Bannari Amman Institute</strong><code>flag{hackathon_winner}</code></div><span class="prize">₹10,000</span></div>
+      <div class="flag"><time>Nov 2022</time><div class="what"><strong>BRICS Skills Competition 2022</strong><code>flag{medallion_of_excellence_cybersecurity}</code></div><span class="prize">Medal</span></div>
+      <div class="flag"><time>Oct 2022</time><div class="what"><strong>Amrita Cybernation 2022</strong><code>flag{1st_ctf__2nd_ui_ux}</code></div><span class="prize">₹18,000</span></div>
+      <div class="flag"><time>Jul 2022</time><div class="what"><strong>Xplore IT Corp CTF Challenge</strong><code>flag{1st_place}</code></div><span class="prize">₹5,000</span></div>
+      <div class="flag"><time>Oct 2021</time><div class="what"><strong>We Byte National Coding Contest</strong><code>flag{1st_prize}</code></div><span class="prize">1st</span></div>
+    </div>
+  </section>
+
+  <section aria-labelledby="exp-h">
+    <h2 id="exp-h">Experience &amp; teaching <span class="cmd">history</span></h2>
+    <div class="timeline">
+      <div class="tl"><span class="when">Oct – Nov 2022</span><h3>Android Developer Intern · Tamil Nadu Police, Coimbatore City</h3><p>Built the Deft Patrol app with Android Studio and Firebase for officers in Singanallur.</p></div>
+      <div class="tl"><span class="when">Jul – Aug 2022</span><h3>Ethical Hacking Trainer</h3><p>Volunteered to teach a class of 25 students the basics of ethical hacking and security tools.</p></div>
+      <div class="tl"><span class="when">Feb – Mar 2022</span><h3>Machine Learning Intern · Towards Technology</h3><p>Built and deployed machine learning models end to end.</p></div>
+      <div class="tl"><span class="when">Dec 2021 – Feb 2022</span><h3>Author, <i>Ethical Hacking</i> · Cybersecurity Lab</h3><p>Co-wrote a book on ethical hacking for the college's cybersecurity lab.</p></div>
+      <div class="tl"><span class="when">Dec 2021 – Jan 2022</span><h3>Python Skill Trainer</h3><p>Mentored a class of 50 students through Python fundamentals.</p></div>
+      <div class="tl"><span class="when">2020 – 2024</span><h3>B.Tech, Information Technology · Bannari Amman Institute of Technology</h3><p>Sathyamangalam, Tamil Nadu. CGPA 9.51. Certifications: Introduction to Cyber Tools &amp; Attacks (Coursera, 90%), Advanced Google Analytics (Google).</p></div>
+    </div>
+  </section>
+
+  <section id="contact" class="contact" aria-labelledby="contact-h">
+    <h2 id="contact-h">Let's work together</h2>
+    <p>Open to freelance front-end work, security reviews, mentoring sessions and paid technical writing.</p>
+    <div class="row">
+      <span class="email" id="email">smsakthi812@gmail.com</span>
+      <button class="btn" id="copy" type="button">Copy email</button>
+    </div>
+  </section>
+
+  <footer>Built with care in Tamil Nadu · © 2026 Sakthi S M</footer>
+</div>
+
+<script>
+document.getElementById('copy').addEventListener('click', function(){
+  var b=this, t=document.getElementById('email').textContent;
+  function sel(){var r=document.createRange();r.selectNodeContents(document.getElementById('email'));var s=getSelection();s.removeAllRanges();s.addRange(r);b.textContent='Selected, press Ctrl+C';}
+  try{navigator.clipboard.writeText(t).then(function(){b.textContent='Copied';setTimeout(function(){b.textContent='Copy email'},1800)},sel)}catch(e){sel()}
+});
+</script>
+</body>
+</html>
